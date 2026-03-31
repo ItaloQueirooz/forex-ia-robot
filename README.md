@@ -1,19 +1,22 @@
-# 🤖 forex-ia-robot — Visão Noturna
+# 🤖 Robô Visão Noturna — Forex IA
 
-> Algoritmo quantitativo de negociação automatizada no mercado Forex, conectado ao MetaTrader 5 via API Python.
+![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python)
+![MetaTrader5](https://img.shields.io/badge/MetaTrader-5-lightblue?logo=metatrader)
+![Status](https://img.shields.io/badge/Status-Operacional-brightgreen)
+![Backtest](https://img.shields.io/badge/Backtest-7.7%25%20em%205%20meses-gold)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-![Python](https://img.shields.io/badge/Python-3.10-blue?style=flat-square&logo=python)
-![MetaTrader5](https://img.shields.io/badge/MetaTrader-5-orange?style=flat-square)
-![Status](https://img.shields.io/badge/Status-Forward%20Testing-green?style=flat-square)
-![Retorno](https://img.shields.io/badge/Backtest-7.7%25%20em%205%20meses-brightgreen?style=flat-square)
+> Algoritmo de negociação quantitativa conectado ao MetaTrader 5, com dashboard de monitoramento em tempo real e lançador com duplo clique.
 
 ---
 
-## 📌 Sobre o Projeto
+## 📸 Screenshots
 
-O **forex-ia-robot** é um robô quantitativo desenvolvido em Python que opera automaticamente nos principais pares de moedas do mercado Forex. Ele utiliza cruzamento de médias móveis e RSI como filtro de entrada, com gestão de risco embutida e trava de tempo entre operações.
+### 🖥️ Terminal do Robô
+![Terminal do Robô](assets/terminal.png)
 
-O projeto foi construído do zero, passando por backtesting, otimização de portfólio e forward testing em conta demo conectada ao MetaTrader 5.
+### 📊 Dashboard em Tempo Real
+![Dashboard](assets/dashboard.png)
 
 ---
 
@@ -21,165 +24,164 @@ O projeto foi construído do zero, passando por backtesting, otimização de por
 
 | Métrica | Resultado |
 |---|---|
-| Período testado | 5 meses (dados cegos) |
+| Período testado | 5 meses (cego) |
 | Capital simulado | $10.000 |
 | Lucro total | $770,80 |
-| Retorno total | **7,7%** |
-| Média mensal | **1,54% ao mês** |
-| Equivalente anual | ~18,5% ao ano |
-
-> 📈 18,5% ao ano supera o S&P 500 histórico (≈10,5% a.a.) e está em nível institucional (Hedge Fund).
+| Retorno total | **7,708%** |
+| Média mensal | **1,54%** |
+| Equivalente anual | **~18,5%** |
+| Comparação | Acima do S&P 500 histórico |
 
 ---
 
-## 🏦 Os 6 Magníficos — Portfólio Final
+## 🏦 Os 6 Magníficos
 
-Após otimização baseada em dados (remoção de ativos com prejuízo sistemático):
-
-| Par | Região | Motivo da Inclusão |
+| Ativo | Par | Sessão Principal |
 |---|---|---|
-| EURUSD | Europa/EUA | Maior liquidez do mundo |
-| GBPUSD | Reino Unido/EUA | Alta volatilidade controlada |
-| USDJPY | EUA/Japão | Correlação asiática |
-| EURGBP | Europa/Reino Unido | Correlação europeia |
-| USDCHF | EUA/Suíça | Ativo refúgio |
-| EURJPY | Europa/Japão | Cruzamento de alta liquidez |
+| EURUSD | Euro / Dólar | Europeia |
+| GBPUSD | Libra / Dólar | Europeia |
+| USDJPY | Dólar / Iene | Asiática/Europeia |
+| EURGBP | Euro / Libra | Europeia |
+| USDCHF | Dólar / Franco Suíço | Europeia |
+| EURJPY | Euro / Iene | Asiática/Europeia |
 
 ---
 
-## 🧠 Arquitetura do Código
+## ⚙️ Arquitetura
 
 ```
 forex-ia-robot/
-│
-├── robo_visao_noturna.py   # Robô principal (loop de execução)
-├── teste_conexao.py        # Script de diagnóstico de conexão MT5
-├── requirements.txt        # Dependências do projeto
-└── README.md               # Documentação
+├── robo_visao_forex.py        # Motor principal do robô
+├── dashboard.py               # Dashboard Streamlit (tempo real)
+├── teste_conexao.py           # Script de diagnóstico MT5
+├── INICIAR_VISAO_NOTURNA.bat  # Lançador com duplo clique
+├── CRIAR_ATALHO_DESKTOP.vbs   # Cria ícone na área de trabalho
+├── assets/
+│   ├── terminal.png           # Print do terminal do robô
+│   └── dashboard.png          # Print do dashboard
+├── requirements.txt           # Dependências Python
+└── .gitignore                 # Arquivos ignorados pelo Git
 ```
 
-### Fluxo de Decisão
+### Lógica do Sinal
 
 ```
-Mercado (MT5)
-     │
-     ▼
-Coleta 100 candles H1
-     │
-     ▼
-Calcula MA9 + MA21 + RSI(14)
-     │
-     ▼
-Cruzamento de médias?  ──NÃO──▶ 😴 Sem sinal
-     │
-    SIM
-     │
-     ▼
-RSI confirma?  ──NÃO──▶ 😴 Filtrado
-     │
-    SIM
-     │
-     ▼
-Envia ordem (BUY/SELL)
-     │
-     ▼
-Trava 3 horas para o ativo
+MA Rápida (9) cruza acima de MA Lenta (21) + RSI < 65  →  BUY
+MA Rápida (9) cruza abaixo de MA Lenta (21) + RSI > 35  →  SELL
 ```
-
-### Indicadores Utilizados
-
-- **MA Rápida (9)** — Captura tendência de curto prazo
-- **MA Lenta (21)** — Confirma tendência de médio prazo
-- **RSI (14)** — Filtro de sobrecompra/sobrevenda (evita entradas em extremos)
 
 ### Gestão de Risco
 
-| Parâmetro | Valor |
-|---|---|
-| Volume por operação | 0.01 lote (mínimo) |
-| Stop Loss | 50 pontos |
-| Take Profit | 100 pontos (RR 1:2) |
-| Trava entre operações | 3 horas por ativo |
+- Stop Loss: 50 pontos por operação
+- Take Profit: 100 pontos por operação (R:R 1:2)
+- Trava de 3 horas entre operações por ativo
+- Volume mínimo: 0.01 lote
 
 ---
 
-## 🚀 Guia de Instalação
+## 🚀 Instalação
 
 ### Pré-requisitos
 
 - Windows 10/11
-- Python 3.10
-- MetaTrader 5 instalado ([download oficial](https://www.metatrader5.com/pt/download))
-- Conta Demo na MetaQuotes (criada direto pelo MT5)
+- [Python 3.10](https://www.python.org/downloads/release/python-3100/)
+- [MetaTrader 5](https://www.metatrader5.com/pt/download) (versão oficial MetaQuotes)
+- Conta demo em qualquer corretora compatível com MT5
 
-### Passo a Passo
+### Passo a passo
 
 **1. Clone o repositório**
 ```bash
-git clone https://github.com/seu-usuario/forex-ia-robot.git
+git clone https://github.com/ItaloQueirooz/forex-ia-robot.git
 cd forex-ia-robot
 ```
 
 **2. Instale as dependências**
 ```bash
-pip install -r requirements.txt
+python -m pip install MetaTrader5 pandas numpy streamlit
 ```
 
 **3. Configure suas credenciais**
 
-Edite o arquivo `robo_visao_noturna.py` e substitua:
+Abra `robo_visao_forex.py` e `dashboard.py` e preencha:
 ```python
-LOGIN    = SEU_LOGIN
-SENHA    = "SUA_SENHA"
-SERVIDOR = "MetaQuotes-Demo"  # ou seu servidor
-MT5_PATH = r"C:\Program Files\MetaTrader 5\terminal64.exe"
+LOGIN    = 00000000          # seu login numérico do MT5
+SENHA    = "SUA-SENHA-AQUI"  # sua senha do MT5
+SERVIDOR = "MetaQuotes-Demo" # seu servidor
 ```
 
-**4. Abra o MetaTrader 5** e certifique-se que está logado
+**4. Crie o atalho da área de trabalho**
 
-**5. Rode o robô**
+Dê duplo clique em `CRIAR_ATALHO_DESKTOP.vbs` — um ícone será criado na sua área de trabalho.
+
+---
+
+## 🖥️ Como usar
+
+### Opção 1 — Duplo clique (recomendado)
+
+1. Dê **duplo clique** no ícone **"Robô Visão Noturna"** na área de trabalho
+2. O sistema irá automaticamente:
+   - Verificar se o MT5 está aberto (abre sozinho se necessário)
+   - Iniciar o robô em uma janela dedicada
+   - Iniciar o dashboard e abrir o navegador
+3. Acesse o dashboard em: `http://localhost:8501`
+
+> ⚠️ **Não feche as janelas pretas** — elas são o robô e o dashboard rodando.
+
+### Opção 2 — Manual via terminal
+
+Robô:
 ```bash
-python robo_visao_noturna.py
+python robo_visao_forex.py
+```
+
+Dashboard:
+```bash
+python -m streamlit run dashboard.py
 ```
 
 ---
 
-## 📦 requirements.txt
+## 📈 Dashboard
 
-```
-MetaTrader5==5.0.5640
-pandas
-numpy
-```
+O dashboard (`dashboard.py`) exibe em tempo real:
+
+- 💰 **Saldo e Equity** da conta
+- ⚡ **Posições abertas** com preço de entrada, SL, TP e lucro atual
+- 📈 **Gráfico de performance acumulada** (últimos 30 dias)
+- 💎 **P&L por ativo** — quais pares estão gerando mais resultado
+- 📋 **Histórico de operações** fechadas
+
+Atualiza automaticamente a cada 30 segundos.
 
 ---
 
 ## ⚠️ Aviso de Risco
 
-Este projeto é para fins educacionais e de pesquisa. Negociação no mercado Forex envolve risco de perda de capital. O desempenho passado (backtest) não garante resultados futuros. Sempre teste em conta demo antes de operar com dinheiro real.
+Este software é fornecido para fins educacionais e de pesquisa. Operações em mercados financeiros envolvem risco de perda de capital. Resultados passados não garantem resultados futuros. Sempre teste em conta demo antes de operar com capital real.
 
 ---
 
 ## 🗺️ Roadmap
 
-- [x] Desenvolvimento do algoritmo base
-- [x] Backtesting em dados históricos (5 meses)
-- [x] Otimização do portfólio (6 ativos)
-- [x] Conexão com MetaTrader 5 via API Python
-- [x] Forward Testing em conta demo
-- [ ] Sistema de Copy Trading (sinais via Telegram)
-- [ ] Dashboard de performance em tempo real
+- [x] Algoritmo base (MA + RSI)
+- [x] Backtest multi-ativo
+- [x] Conexão com MetaTrader 5
+- [x] Dashboard em tempo real
+- [x] Lançador com duplo clique
+- [ ] Forward Testing 30 dias em conta demo
+- [ ] Sistema de alertas via Telegram
 - [ ] Deploy em VPS para operação 24/7
-- [ ] Mesa Proprietária (Prop Firm)
+- [ ] Integração com mesa proprietária (Prop Firm)
 
 ---
 
-## 👨‍💻 Autor
+## 👤 Autor
 
 **Italo Queiroz**
-Analista de dados em formação 
+- GitHub: [@ItaloQueirooz](https://github.com/ItaloQueirooz)
+
 ---
 
-## 📄 Licença
-
-MIT License — sinta-se livre para estudar, modificar e distribuir.
+*Desenvolvido com Python 🐍 + MetaTrader 5 📊*
