@@ -22,10 +22,9 @@ else:
     print("✅ MT5 inicializado com sucesso!")
 
 print("\n🔑 Passo 3: Tentando login...")
-LOGIN    = 105200600#LOGIN DE CONTA
-SENHA    = "SUA_SENHA_AQUI"
-SERVIDOR = "MetaQuotes-Demo" #SERVIDOR
-
+LOGIN    = 105222646 #CONTA
+SENHA    = "SUA_SENHA_AQUI" #SENHA
+SERVIDOR = "MetaQuotes-Demo" #SERVER
 autorizado = mt5.login(LOGIN, password=SENHA, server=SERVIDOR)
 
 if not autorizado:

@@ -10,9 +10,10 @@ warnings.filterwarnings('ignore')
 # CONFIGURAÇÕES
 # ============================================================
 MT5_PATH = r"C:\Program Files\MetaTrader 5\terminal64.exe"
-LOGIN    = 5048650522 #LOGIN DE CONTA
-SENHA    = "SUA-SENHA-AQUI"
-SERVIDOR = "MetaQuotes-Demo" #SERVIDOR
+
+LOGIN    = 105222646 #CONTA
+SENHA    = "SUA_SENHA_AQUI" #SENHA
+SERVIDOR = "MetaQuotes-Demo" #SERVER
 
 ATIVOS = ["EURUSD", "GBPUSD", "USDJPY", "EURGBP", "USDCHF", "EURJPY"]
 
@@ -109,7 +110,7 @@ def enviar_ordem(ativo, direcao):
         "magic"    : 234000,
         "comment"  : "Visao Noturna",
         "type_time": mt5.ORDER_TIME_GTC,
-        "type_filling": mt5.ORDER_FILLING_IOC,
+        "type_filling": mt5.ORDER_FILLING_FOK,
     }
 
     resultado = mt5.order_send(request)
